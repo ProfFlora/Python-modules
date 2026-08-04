@@ -5,7 +5,7 @@ class Plant:
 
     @classmethod
     def anon(cls) -> Plant:
-        return cls(None, 0, 0)
+        return cls("Unknown plant", 0, 0)
 
     class Stats:
         def __init__(self) -> None:
@@ -17,27 +17,27 @@ class Plant:
             print("Stats: ", end="")
             print(f"{self._grow} grow, {self._ages} age, {self._show} show")
 
+    def stat_init(self) -> None:
+        self._stats = self.Stats()
+
     def get_stats(self) -> Stats:
         return self._stats
 
     def get_name(self) -> str:
-        if self._name is not None:
-            return (self._name)
-        else:
-            return "Unknown plant"
+        return (self._name)
 
     def set_height(self, height: float) -> None:
         if height >= 0:
             self._height = height
         else:
-            print(f"{self.name}: Error, height can't be negative")
+            print(f"{self._name}: Error, height can't be negative")
             print("Height update rejected")
 
     def set_age(self, age: int) -> None:
         if age >= 0:
             self._age = age
         else:
-            print(f"{self.name}: Error, age can't be negative")
+            print(f"{self._name}: Error, age can't be negative")
             print("Age update rejected")
 
     def set_growth_factor(self, growth_factor: float) -> None:
@@ -59,7 +59,7 @@ class Plant:
         self._age = 0
         self.set_age(age)
         self._growth_factor = 0
-        self._stats = self.Stats()
+        self.stat_init()
 
     def show(self) -> None:
         self._stats._show += 1
@@ -141,7 +141,7 @@ class Vegetable(Plant):
 
 
 class Tree(Plant):
-    class Stats(Plant.Stats):
+    class Tree_Stats(Plant.Stats):
         def __init__(self) -> None:
             super().__init__()
             self._shade = 0
@@ -149,6 +149,9 @@ class Tree(Plant):
         def display(self) -> None:
             super().display()
             print(f"{self._shade} shade")
+
+    def stat_init(self) -> None:
+        self._stats = self.Tree_Stats()
 
     def __init__(self, name: str, size: float, age: int, trunk: float) -> None:
         super().__init__(name, size, age)

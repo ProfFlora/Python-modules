@@ -3,14 +3,14 @@ class Plant:
         if height >= 0:
             self._height = height
         else:
-            print(f"{self.name}: Error, height can't be negative")
+            print(f"{self._name}: Error, height can't be negative")
             print("Height update rejected")
 
     def set_age(self, age: int) -> None:
         if age >= 0:
             self._age = age
         else:
-            print(f"{self.name}: Error, age can't be negative")
+            print(f"{self._name}: Error, age can't be negative")
             print("Age update rejected")
 
     def set_growth_factor(self, growth_factor: float) -> None:
