@@ -17,9 +17,6 @@ class Plant:
             print("Stats: ", end="")
             print(f"{self._grow} grow, {self._ages} age, {self._show} show")
 
-    def stat_init(self) -> None:
-        self._stats = self.Stats()
-
     def get_stats(self) -> Stats:
         return self._stats
 
@@ -59,7 +56,7 @@ class Plant:
         self._age = 0
         self.set_age(age)
         self._growth_factor = 0
-        self.stat_init()
+        self._stats = self.Stats()
 
     def show(self) -> None:
         self._stats._show += 1
@@ -141,7 +138,7 @@ class Vegetable(Plant):
 
 
 class Tree(Plant):
-    class Tree_Stats(Plant.Stats):
+    class Stats(Plant.Stats):
         def __init__(self) -> None:
             super().__init__()
             self._shade = 0
@@ -150,19 +147,29 @@ class Tree(Plant):
             super().display()
             print(f"{self._shade} shade")
 
-    def stat_init(self) -> None:
-        self._stats = self.Tree_Stats()
-
     def __init__(self, name: str, size: float, age: int, trunk: float) -> None:
         super().__init__(name, size, age)
+        self._tree_stats = self.Stats()
         self._trunk_diameter = trunk
+
+    def get_stats(self) -> Stats:
+        return self._tree_stats
 
     def show(self) -> None:
         super().show()
+        self._tree_stats._show += 1
         print(f"Trunk diameter: {round(self._trunk_diameter, 1)}cm")
 
+    def grow(self, growth: float, time: int = 1) -> None:
+        super().grow(growth, time)
+        self._tree_stats._grow += 1
+
+    def age(self, aging: int = 1) -> None:
+        super().age(aging)
+        self._tree_stats._ages += 1
+
     def produce_shade(self) -> None:
-        self._stats._shade += 1
+        self._tree_stats._shade += 1
         print(f"{self._name} now produces a shade", end=" ")
         print(f"{self._height}cm tall and {self._trunk_diameter}cm wide.")
 
@@ -180,6 +187,7 @@ if __name__ == "__main__":
 
     rose = Flower("Rose", 15.0, 10, "red")
     oak = Tree("Oak", 200.0, 365, 5.0)
+    poak = Tree("Poak", 200.0, 365, 5.0)
     tomato = Vegetable("Tomato", 5.0, 10, "April")
     sunflower = Seed("Sunflower", 80.0, 45, "yellow")
 
@@ -198,6 +206,13 @@ if __name__ == "__main__":
     print("[asking the oak to produce shade]")
     oak.produce_shade()
     show_stats(oak)
+
+    print("\n=== Tree")
+    poak.show()
+    show_stats(poak)
+    print("[asking the poak to produce shade]")
+    poak.produce_shade()
+    show_stats(poak)
 
     print("\n=== Vegetable")
     tomato.show()
