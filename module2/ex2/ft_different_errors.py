@@ -1,12 +1,12 @@
 def garden_operations(operation_number: int) -> None:
-    a = 1
+    a = 1.5
     match operation_number:
         case 0:
             a = int("abc")
         case 1:
             a = 1/0
         case 2:
-            a = open("file_that_doesnt_exist")
+            open("file_that_doesnt_exist")
         case 3:
             a = "a" + a
         case _:
