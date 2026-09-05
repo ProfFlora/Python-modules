@@ -12,7 +12,7 @@ def get_player_pos() -> Coordinate:
             print("Invalid syntax")
         else:
             split = coords.split(',', 2)
-            parsed: list = [0, 0, 0]
+            parsed = [0, 0, 0]
             for i in (0, 1, 2):
                 try:
                     parsed[i] = float(split[i])
