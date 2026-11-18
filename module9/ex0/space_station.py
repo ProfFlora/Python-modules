@@ -10,7 +10,7 @@ class SpaceStation(BaseModel):
     power_level: float = Field(ge=0.0, le=100.0)
     oxygen_level: float = Field(ge=0.0, le=100.0)
     last_maintenance: datetime
-    is_operational: bool = Field(default=True)
+    is_operational: bool = True
     notes: Optional[str] = Field(max_length=200, default=None)
 
 
@@ -28,9 +28,9 @@ def main() -> None:
     print("Valid station created:")
     for key, value in station.model_dump().items():
         print(f"{key}: {value}")
-    print("========================================")
+    print("\n========================================")
 
-    print("\nExpected validation error:")
+    print("Expected validation error:")
     try:
         bad_station = SpaceStation(
             station_id="ISS001",
