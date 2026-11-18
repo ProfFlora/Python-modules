@@ -5,10 +5,10 @@ from enum import Enum
 
 
 class ContactType(Enum):
-    radio = 1
-    visual = 2
-    physical = 3
-    telepathic = 4
+    radio = "radio"
+    visual = "visual"
+    physical = "physical"
+    telepathic = "telepathic"
 
 
 class AlienContact(BaseModel):
@@ -23,40 +23,27 @@ class AlienContact(BaseModel):
     is_verified: bool = False
 
     @model_validator(mode='after')
-    def validate_ID(self) -> AlienContact:
+    def validate(self) -> AlienContact:
+        errors: list[str] = []
+
         if not self.contact_id.startswith("AC"):
+            errors.append("Contact ID must start with 'AC' (Alien Contact)")
 
-            raise ValueError(
-                "Contact ID must start with 'AC' (Alien Contact)"
-                )
-        return self
-
-    @model_validator(mode='after')
-    def validate_physical(self) -> AlienContact:
         if self.contact_type == ContactType.physical and not self.is_verified:
+            errors.append("Physical contact reports must be verified")
 
-            raise ValueError(
-                "Physical contact reports must be verified"
-            )
-        return self
-
-    @model_validator(mode='after')
-    def validate_telepathic(self) -> AlienContact:
         if self.contact_type == ContactType.telepathic and \
            self.witness_count < 3:
+            errors.append("Telepathic contact requires at least 3 witnesses")
 
-            raise ValueError(
-                "Telepathic contact requires at least 3 witnesses",
-            )
-        return self
-
-    @model_validator(mode='after')
-    def validate_strong(self) -> AlienContact:
         if self.signal_strength > 7.0 and self.message_received is None:
-
-            raise ValueError(
+            errors.append(
                 "Strong signals (> 7.0) should include received messages"
-            )
+                )
+
+        if errors:
+            raise ValueError(" | ".join(errors))
+
         return self
 
 
@@ -76,7 +63,7 @@ def main() -> None:
         )
         print("Valid contact report:")
         print(f"ID: {report.contact_id}")
-        print(f"Type: {report.contact_type}")
+        print(f"Type: {report.contact_type.value}")
         print(f"Location: {report.location}")
         print(f"Signal: {report.signal_strength}/10")
         print(f"Duration: {report.duration_minutes} minutes")
