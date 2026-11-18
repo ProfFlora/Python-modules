@@ -23,7 +23,7 @@ class AlienContact(BaseModel):
     is_verified: bool = False
 
     @model_validator(mode='after')
-    def validate(self) -> AlienContact:
+    def validate_contact(self) -> AlienContact:
         errors: list[str] = []
 
         if not self.contact_id.startswith("AC"):
@@ -53,7 +53,7 @@ def main() -> None:
     try:
         report = AlienContact(
             contact_id="AC_2024_001",
-            timestamp="2024-01-01",
+            timestamp=datetime(2024, 1, 1),
             contact_type=ContactType.radio,
             location="Area 51, Nevada",
             signal_strength=8.5,
@@ -77,7 +77,7 @@ def main() -> None:
     try:
         bad_report = AlienContact(
             contact_id="AC_2024_002",
-            timestamp="2024-01-02",
+            timestamp=datetime(2024, 1, 2),
             contact_type=ContactType.telepathic,
             location="Area 67, New Mexico",
             signal_strength=4.2,
